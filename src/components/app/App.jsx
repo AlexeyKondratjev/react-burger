@@ -1,16 +1,21 @@
 import React from 'react';
-import logo from '../../logo.svg';
-import './App.css';
+
+import testData from '../../utils/data';
+
+import appStyles from './App.module.css';
+
+import AppHeader from '../AppHeader/AppHeader';
+import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
+import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 
 export const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
-    </div>
+    <>
+      <AppHeader />
+      <main className={appStyles.main}>
+        <BurgerIngredients data={testData}/>
+        <BurgerConstructor data={testData}/>
+      </main>
+    </>
   );
 }

@@ -1,0 +1,40 @@
+.section {
+  max-width: 600px;
+}
+
+.tabs {
+  display: flex;
+}
+
+.link {
+  text-decoration-line: none;
+}
+
+.categoryList {
+  list-style-type: none;
+  max-height: 664px;
+  overflow-y: scroll;
+  margin: 0;
+  padding: 0;
+}
+
+.categoryList::-webkit-scrollbar {
+  background-color: #2F2F37;
+  width: 8px;
+}
+
+.categoryList::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
+
+.ingredientsList {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(2, 272px);
+  grid-template-rows: repeat(1, 208px);
+  grid-auto-rows: 208px;
+  gap: 32px 24px;
+  max-width: 600px;
+  list-style-type: none;
+  padding: 0;
+}

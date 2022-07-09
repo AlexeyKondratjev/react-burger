@@ -6,6 +6,7 @@ import { ConstructorElement, Button, CurrencyIcon } from '@ya.praktikum/react-de
 import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
 import Modal from '../Modal/Modal';
 import OrderDetails from '../OrderDetails/OrderDetails';
+import ingredientType from '../../utils/types';
 
 function BurgerConstructor(props) {
   const [isOpened, setIsOpened] = useState(false);
@@ -16,7 +17,7 @@ function BurgerConstructor(props) {
       <ul className={burgerConstructorStyles.positionsList}>
 
         <li className='ml-8 mr-4 mb-4'>
-          {props.data.slice(0, 1).map(item => <ConstructorElement
+          {props.data.filter(item => item.type === 'bun').slice(0, 1).map(item => <ConstructorElement
             key={item._id}
             type="top"
             isLocked={true}
@@ -27,12 +28,12 @@ function BurgerConstructor(props) {
 
         <li>
           <ul className={burgerConstructorStyles.chosenPositionsList}>
-            {props.data.slice(1).map(item => <BurgerConstructorItem data={item} key={item._id} />)}
+            {props.data.filter(item => item.type !== 'bun').map(item => <BurgerConstructorItem data={item} key={item._id} />)}
           </ul>
         </li>
 
         <li className='mt-4 ml-8 mr-4'>
-          {props.data.slice(0, 1).map(item => <ConstructorElement
+          {props.data.filter(item => item.type === 'bun').slice(0, 1).map(item => <ConstructorElement
             key={item._id}
             type="bottom"
             isLocked={true}
@@ -65,13 +66,9 @@ function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired
-  })
+  data: PropTypes.arrayOf(
+    PropTypes.shape(ingredientType)
   ).isRequired
-}
+};
 
 export default BurgerConstructor;

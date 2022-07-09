@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import ingredientDetailsStyles from './IngredientDetails.module.css';
+import ingredientType from '../../utils/types';
 
 function IngredientDetails({ name, image, calories, proteins, fats, carbohydrates }) {
   return (
@@ -29,13 +29,6 @@ function IngredientDetails({ name, image, calories, proteins, fats, carbohydrate
   );
 }
 
-IngredientDetails.propTypes = {
-  name: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  calories: PropTypes.number.isRequired,
-  proteins: PropTypes.number.isRequired,
-  fats: PropTypes.number.isRequired,
-  carbohydrates: PropTypes.number.isRequired
-};
+IngredientDetails.propTypes = ingredientType;
 
 export default IngredientDetails;

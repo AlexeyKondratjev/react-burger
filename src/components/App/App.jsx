@@ -19,17 +19,15 @@ export default function App() {
 
       try {
         const res = await fetch(API_PATH);
-        /* console.log('fetch done'); */
+
         if (!res.ok) {
           throw new Error(`An error has occurred! Error status: ${res.status}`)
         }
 
         const data = await res.json();
-        /* console.log('json done'); */
         setState((prevState) => ({ ...prevState, data: data.data, isLoading: false, hasError: false }));
-        /* console.log('setState done'); */
+
       } catch (error) {
-        /* console.log('catch section'); */
         console.log(error);
         setState((prevState) => ({ ...prevState, isLoading: false, hasError: true }));
       }
@@ -42,7 +40,7 @@ export default function App() {
 
 
   return (
-    <>
+    <div className={appStyles.page}>
       <AppHeader />
       <main className={appStyles.main}>
         {state.isLoading && <p>{"LOADING..."}</p>}
@@ -54,6 +52,6 @@ export default function App() {
           </>
         }
       </main>
-    </>
+    </div>
   );
 }

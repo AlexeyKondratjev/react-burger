@@ -65,8 +65,7 @@ BurgerIngredients.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired
-  }).isRequired
-  ).isRequired
+  })).isRequired
 }
 
 export default BurgerIngredients;

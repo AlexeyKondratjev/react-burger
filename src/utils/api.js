@@ -1,4 +1,4 @@
-import { API_PATH_ORDERS } from '../utils/constants';
+import { API_PATH_ORDERS, API_PATH_INGREDIENTS } from '../utils/constants';
 
 function getOrderData(ingredientsId) {
   return fetch(API_PATH_ORDERS, {
@@ -16,5 +16,15 @@ function getOrderData(ingredientsId) {
     });
 };
 
+function getIngredientsData() {
+  return fetch(API_PATH_INGREDIENTS)
+    .then((res) => {
+      if (!res.ok) {
+        return Promise.reject(`Ошибка ${res.status}`);
+      }
+      return res.json();
+    });
+};
 
-export { getOrderData };
+
+export { getOrderData, getIngredientsData };

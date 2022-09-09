@@ -6,6 +6,7 @@ import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorIte
 import Modal from '../Modal/Modal';
 import OrderDetails from '../OrderDetails/OrderDetails';
 import { getOrderData } from '../../utils/api';
+import { ACTION_TYPE_SUM, INGREDIENT_TYPE_BUN } from '../../utils/constants';
 
 import { IngredientsContext, TotalPriceContext } from '../../services/appContext';
 
@@ -15,28 +16,31 @@ function BurgerConstructor() {
   const { totalPriceState, totalPriceDispatcher } = useContext(TotalPriceContext);
 
   const bunItem = useMemo(
-    () => state.data.filter(item => item.type === 'bun').slice(0, 1),
+    () => state.data.find(item => item.type === INGREDIENT_TYPE_BUN),
     [state.data]
   );
-  const detailsItems = useMemo(() => state.data.filter(item => item.type !== 'bun'),
+  const detailsItems = useMemo(() => state.data.filter(item => item.type !== INGREDIENT_TYPE_BUN),
     [state.data]
   );
 
   useEffect(() =>
-    totalPriceDispatcher({ type: 'sum', payload: [...bunItem, ...detailsItems] }),
+    totalPriceDispatcher({ type: ACTION_TYPE_SUM, payload: [bunItem, ...detailsItems] }),
     [bunItem, detailsItems]
   );
 
   useEffect(() => {
-    const idArr = [];
-
-    [...bunItem, ...detailsItems].forEach(item => idArr.push(item._id));
+    const idArr = [bunItem, bunItem, ...detailsItems].map(item => item ? item._id : '');
 
     setState((prevState) => ({ ...prevState, ingredientsId: idArr }))
   },
     [state.data]
   );
 
+  function getOrderDataFromBackend() {
+    getOrderData(state.ingredientsId)
+      .then(data => setState((prevState) => ({ ...prevState, orderData: data })))
+      .catch(err => console.log(err));
+  };
 
 
   return (
@@ -45,13 +49,13 @@ function BurgerConstructor() {
       <ul className={burgerConstructorStyles.positionsList}>
 
         <li className='ml-8 mr-4 mb-4'>
-          {bunItem.map(item => <ConstructorElement
-            key={item._id}
+          {bunItem && <ConstructorElement
+            key={bunItem._id}
             type="top"
             isLocked={true}
-            text={`${item.name} (верх)`}
-            price={item.price}
-            thumbnail={item.image} />)}
+            text={`${bunItem.name} (верх)`}
+            price={bunItem.price}
+            thumbnail={bunItem.image} />}
         </li>
 
         <li>
@@ -63,15 +67,14 @@ function BurgerConstructor() {
         </li>
 
         <li className='mt-4 ml-8 mr-4'>
-          {bunItem.map(item =>
-            <ConstructorElement
-              key={item._id}
-              type="bottom"
-              isLocked={true}
-              text={`${item.name} (низ)`}
-              price={item.price}
-              thumbnail={item.image} />
-          )}
+          {bunItem && <ConstructorElement
+            key={bunItem._id}
+            type="bottom"
+            isLocked={true}
+            text={`${bunItem.name} (низ)`}
+            price={bunItem.price}
+            thumbnail={bunItem.image} />
+          }
         </li>
 
       </ul>
@@ -84,9 +87,7 @@ function BurgerConstructor() {
 
         <Button type="primary" size="large" onClick={() => {
           setIsOpened(true);
-          getOrderData(state.ingredientsId)
-            .then(data => setState((prevState) => ({ ...prevState, orderData: data })))
-            .catch(err => console.log(err));
+          getOrderDataFromBackend();
         }}>Оформить заказ</Button>
 
         <Modal isOpened={isOpened} onClose={() => setIsOpened(false)}>

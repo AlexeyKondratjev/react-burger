@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect, useReducer } from 'react';
 import { API_PATH_INGREDIENTS, TOTAL_PRICE_INITIAL_STATE } from '../../utils/constants';
 import { totalPriceReducer } from '../../utils/utils';
+import { getIngredientsData } from '../../utils/api';
 import appStyles from './App.module.css';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
@@ -31,21 +32,13 @@ export default function App() {
       setState((prevState) => ({ ...prevState, isLoading: true, hasError: false }));
 
       try {
-        const res = await fetch(API_PATH_INGREDIENTS);
-
-        if (!res.ok) {
-          throw new Error(`An error has occurred! Error status: ${res.status}`)
-        }
-
-        const data = await res.json();
+        const data = await getIngredientsData();
         setState((prevState) => ({ ...prevState, data: data.data, isLoading: false, hasError: false }));
-
       } catch (error) {
         console.log(error);
         setState((prevState) => ({ ...prevState, isLoading: false, hasError: true }));
       }
-
-    }
+    };
 
     getData();
   }, []);

@@ -1,67 +1,23 @@
 import React from 'react';
-import { useState, useEffect, useReducer } from 'react';
-import { API_PATH_INGREDIENTS, TOTAL_PRICE_INITIAL_STATE } from '../../utils/constants';
-import { totalPriceReducer } from '../../utils/utils';
-import { getIngredientsData } from '../../utils/api';
 import appStyles from './App.module.css';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
-import { IngredientsContext, TotalPriceContext } from '../../services/appContext';
 
 
 export default function App() {
-  const [state, setState] = useState({
-    isLoading: false,
-    hasError: false,
-    data: [],
-    ingredientsId: [],
-    orderData: {
-      name: "",
-      order: {
-        number: null,
-      },
-      success: false,
-    }
-  });
-  const [totalPriceState, totalPriceDispatcher] = useReducer(totalPriceReducer, TOTAL_PRICE_INITIAL_STATE, undefined);
-
-  useEffect(() => {
-    const getData = async () => {
-      setState((prevState) => ({ ...prevState, isLoading: true, hasError: false }));
-
-      try {
-        const data = await getIngredientsData();
-        setState((prevState) => ({ ...prevState, data: data.data, isLoading: false, hasError: false }));
-      } catch (error) {
-        console.log(error);
-        setState((prevState) => ({ ...prevState, isLoading: false, hasError: true }));
-      }
-    };
-
-    getData();
-  }, []);
-
-
-
   return (
     <div className={appStyles.page}>
       <AppHeader />
-      <main className={appStyles.main}>
-        {state.isLoading && <p>{"LOADING..."}</p>}
-        {state.hasError && <p>{"AN ERROR HAS OCCURED (SEE CONSOLE)!"}</p>}
-        {!state.isLoading && !state.hasError &&
-          <>
-            <BurgerIngredients data={state.data} />
-            <IngredientsContext.Provider value={{ state, setState }}>
-              <TotalPriceContext.Provider value={{ totalPriceState, totalPriceDispatcher }}>
-                <BurgerConstructor />
-              </TotalPriceContext.Provider>
-            </IngredientsContext.Provider>
-          </>
-        }
-      </main>
+      <DndProvider backend={HTML5Backend}>
+        <main className={appStyles.main}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </main>
+      </DndProvider>
     </div>
   );
 }

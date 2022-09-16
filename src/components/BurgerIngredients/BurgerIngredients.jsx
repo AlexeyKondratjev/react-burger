@@ -1,30 +1,81 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useCallback } from 'react';
+/* import PropTypes from 'prop-types'; */
 import burgerIngredientsStyles from './BurgerIngredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Ingredient from '../Ingredient/Ingredient';
-import ingredientType from '../../utils/types';
+/* import ingredientType from '../../utils/types'; */
 import Modal from '../Modal/Modal';
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
+import Loader from '../Loader/Loader';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllIngredients } from '../../services/actions/allIngredients';
+import {
+  GET_VIEWED_INGREDIENT,
+  REMOVE_VIEWED_INGREDIENT
+} from '../../services/actions/viewedIngredient';
+import { useInView } from 'react-intersection-observer';
+import { USE_IN_VIEW_OPTIONS } from '../../utils/constants';
 
-function BurgerIngredients(props) {
-  const [current, setCurrent] = React.useState('one');
+
+
+function BurgerIngredients() {
+  const dispatch = useDispatch();
+  const [current, setCurrent] = React.useState('bunTab');
   const [isOpened, setIsOpened] = React.useState(false);
-  const [clickedIngredient, setClickedIngredient] = React.useState({});
+  const { allIngredients, allIngredientsRequest } = useSelector(store => store.allIngredients);
 
-  const getfilteredData = (data, filterCondition) => {
+  const getViewedIngredientData = useCallback((payload) => {
+    setIsOpened(true);
+    dispatch({ type: GET_VIEWED_INGREDIENT, payload: payload });
+  }, [isOpened, dispatch]);
+
+  const removeViewedIngredientData = useCallback(() => {
+    setIsOpened(false);
+    dispatch({ type: REMOVE_VIEWED_INGREDIENT });
+  }, [isOpened, dispatch]);
+
+  const getFilteredIngredients = (data, filterCondition) => {
     const filtered = data.filter(item => item.type === filterCondition);
 
     return filtered.map(item =>
       <Ingredient
         data={item}
         key={item._id}
-        onClick={() => {
-          setIsOpened(true);
-          setClickedIngredient(item);
-        }}
+        onClick={() => { getViewedIngredientData(item) }}
       />);
   };
+
+  useEffect(() => {
+    dispatch(getAllIngredients())
+  }, [dispatch]);
+
+
+  const [bunListItemRef, bunListItemInView] = useInView(USE_IN_VIEW_OPTIONS);
+  const [sauceListItemRef, sauceListItemInView] = useInView(USE_IN_VIEW_OPTIONS);
+  const [mainListItemRef, mainListItemInView] = useInView(USE_IN_VIEW_OPTIONS);
+
+  const inViewHandler = () => {
+    switch (true) {
+      case bunListItemInView: {
+        setCurrent('bunTab');
+        break;
+      }
+      case sauceListItemInView: {
+        setCurrent('sauceTab');
+        break;
+      }
+      case mainListItemInView: {
+        setCurrent('mainTab');
+        break;
+      }
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    inViewHandler();
+  }, [bunListItemInView, sauceListItemInView, mainListItemInView]);
 
   return (
     <section className={burgerIngredientsStyles.section}>
@@ -32,63 +83,59 @@ function BurgerIngredients(props) {
       <h1 className='text text_type_main-large mt-10'>Соберите бургер</h1>
 
       <div className={`${burgerIngredientsStyles.tabs} mt-5 mb-10`}>
-        <a href='#' className={burgerIngredientsStyles.link}>
-          <Tab value='one' active={current === 'one'} onClick={setCurrent}>
+        <a href='#bunListItem' className={burgerIngredientsStyles.link}>
+          <Tab value='bunTab' active={current === 'bunTab'} onClick={setCurrent}>
             Булки
           </Tab>
         </a>
-        <a href='#' className={burgerIngredientsStyles.link}>
-          <Tab value='two' active={current === 'two'} onClick={setCurrent}>
+        <a href='#sauceListItem' className={burgerIngredientsStyles.link}>
+          <Tab value='sauceTab' active={current === 'sauceTab'} onClick={setCurrent}>
             Соусы
           </Tab>
         </a>
-        <a href='#' className={burgerIngredientsStyles.link}>
-          <Tab value='three' active={current === 'three'} onClick={setCurrent}>
+        <a href='#mainListItem' className={burgerIngredientsStyles.link}>
+          <Tab value='mainTab' active={current === 'mainTab'} onClick={setCurrent}>
             Начинки
           </Tab>
         </a>
       </div>
 
-      <ul className={burgerIngredientsStyles.categoryList}>
-        <li>
-          <h2 className='text text_type_main-medium'>Булки</h2>
-          <ul className={`${burgerIngredientsStyles.ingredientsList} mt-6 mb-10`}>
-            {getfilteredData(props.data, 'bun')}
+      {allIngredientsRequest ? (<Loader size='superLarge' />)
+        : (
+          <ul className={burgerIngredientsStyles.categoryList} >
+            <li id='bunListItem' ref={bunListItemRef}>
+              <h2 className='text text_type_main-medium'>Булки</h2>
+              <ul className={`${burgerIngredientsStyles.ingredientsList} mt-6 mb-10`}>
+                {getFilteredIngredients(allIngredients, 'bun')}
+              </ul>
+            </li>
+            <li id='sauceListItem' ref={sauceListItemRef}>
+              <h2 className='text text_type_main-medium'>Соусы</h2>
+              <ul className={`${burgerIngredientsStyles.ingredientsList} mt-6 mb-10`}>
+                {getFilteredIngredients(allIngredients, 'sauce')}
+              </ul>
+            </li>
+            <li id='mainListItem' ref={mainListItemRef}>
+              <h2 className="text text_type_main-medium">Начинки</h2>
+              <ul className={`${burgerIngredientsStyles.ingredientsList} mt-6 mb-10`}>
+                {getFilteredIngredients(allIngredients, 'main')}
+              </ul>
+            </li>
           </ul>
-        </li>
-        <li>
-          <h2 className='text text_type_main-medium'>Соусы</h2>
-          <ul className={`${burgerIngredientsStyles.ingredientsList} mt-6 mb-10`}>
-            {getfilteredData(props.data, 'sauce')}
-          </ul>
-        </li>
-        <li>
-          <h2 className="text text_type_main-medium">Начинки</h2>
-          <ul className={`${burgerIngredientsStyles.ingredientsList} mt-6 mb-10`}>
-            {getfilteredData(props.data, 'main')}
-          </ul>
-        </li>
-      </ul>
+        )}
 
-      <Modal title='Детали ингредиента' isOpened={isOpened} onClose={() => setIsOpened(false)}>
-        <IngredientDetails
-          name={clickedIngredient.name}
-          image={clickedIngredient.image_large}
-          calories={clickedIngredient.calories}
-          proteins={clickedIngredient.proteins}
-          fats={clickedIngredient.fat}
-          carbohydrates={clickedIngredient.carbohydrates}
-        />
+      <Modal title='Детали ингредиента' isOpened={isOpened} onClose={() => { removeViewedIngredientData() }}>
+        <IngredientDetails />
       </Modal>
 
     </section>
   );
 }
 
-BurgerIngredients.propTypes = {
+/* BurgerIngredients.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape(ingredientType)
   ).isRequired
-};
+}; */
 
 export default BurgerIngredients;

@@ -2,6 +2,7 @@ import orderDetailsStyles from './OrderDetails.module.css';
 import PropTypes from 'prop-types';
 
 
+
 function OrderDetails({ orderId, orderStatus, orderInfoMessage }) {
   return (
     <div className={orderDetailsStyles.content}>
@@ -15,11 +16,13 @@ function OrderDetails({ orderId, orderStatus, orderInfoMessage }) {
 }
 
 
+
 OrderDetails.propTypes = {
   orderId: PropTypes.string.isRequired,
   orderStatus: PropTypes.string.isRequired,
   orderInfoMessage: PropTypes.string
 };
+
 
 
 export default OrderDetails;

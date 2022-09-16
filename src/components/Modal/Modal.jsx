@@ -6,7 +6,10 @@ import modalStyles from './Modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 
+
+
 function Modal({ children, isOpened, onClose, title = "" }) {
+
   useEffect(() => {
     const closeByEsc = (event) => {
       if (event.key === 'Escape') {
@@ -22,6 +25,8 @@ function Modal({ children, isOpened, onClose, title = "" }) {
       };
     }
   }, [isOpened]);
+
+
 
   return isOpened ? (ReactDOM.createPortal(
     (
@@ -42,11 +47,15 @@ function Modal({ children, isOpened, onClose, title = "" }) {
   )) : null;
 }
 
+
+
 Modal.propTypes = {
   children: PropTypes.element.isRequired,
   isOpened: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string
 }
+
+
 
 export default Modal;

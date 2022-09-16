@@ -8,12 +8,6 @@
   cursor: pointer;
 }
 
-.counter {
-  position: absolute;
-  top: 50px;
-  right: -50px;
-}
-
 .image {
   width: 240px;
   height: 120px;

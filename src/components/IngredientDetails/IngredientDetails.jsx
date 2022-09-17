@@ -1,34 +1,37 @@
 import ingredientDetailsStyles from './IngredientDetails.module.css';
-import ingredientType from '../../utils/types';
+import { useSelector } from 'react-redux';
 
-function IngredientDetails({ name, image, calories, proteins, fats, carbohydrates }) {
+
+
+function IngredientDetails() {
+  const ingredientData = useSelector(store => store.viewedIngredient.ingredientData);
+
   return (
     <div className={ingredientDetailsStyles.content}>
-      <img src={image} alt={name} className={ingredientDetailsStyles.image} />
-      <h3 className="text text_type_main-medium mt-4">{name}</h3>
+      <img src={ingredientData.image_large} alt={ingredientData.name} className={ingredientDetailsStyles.image} />
+      <h3 className="text text_type_main-medium mt-4">{ingredientData.name}</h3>
 
       <ul className={`${ingredientDetailsStyles.propertiesList} mt-8`}>
         <li className={`${ingredientDetailsStyles.propertiesListItem} mr-5`}>
           <p className="text text_type_main-default text_color_inactive">Калории,&nbsp;ккал</p>
-          <p className="text text_type_digits-default text_color_inactive">{calories}</p>
+          <p className="text text_type_digits-default text_color_inactive">{ingredientData.calories}</p>
         </li>
         <li className={`${ingredientDetailsStyles.propertiesListItem} mr-5`}>
           <p className="text text_type_main-default text_color_inactive">Белки,&nbsp;г</p>
-          <p className="text text_type_digits-default text_color_inactive">{proteins}</p>
+          <p className="text text_type_digits-default text_color_inactive">{ingredientData.proteins}</p>
         </li>
         <li className={`${ingredientDetailsStyles.propertiesListItem} mr-5`}>
           <p className="text text_type_main-default text_color_inactive">Жиры,&nbsp;г</p>
-          <p className="text text_type_digits-default text_color_inactive">{fats}</p>
+          <p className="text text_type_digits-default text_color_inactive">{ingredientData.fat}</p>
         </li>
         <li className={ingredientDetailsStyles.propertiesListItem}>
           <p className="text text_type_main-default text_color_inactive">Углеводы,&nbsp;г</p>
-          <p className="text text_type_digits-default text_color_inactive">{carbohydrates}</p>
+          <p className="text text_type_digits-default text_color_inactive">{ingredientData.carbohydrates}</p>
         </li>
       </ul>
     </div>
   );
 }
 
-IngredientDetails.propTypes = ingredientType;
 
 export default IngredientDetails;

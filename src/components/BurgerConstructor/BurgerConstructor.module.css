@@ -6,14 +6,33 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
+  min-width: 564px;
+}
+
+.hoveredList {
+  box-shadow: 0px 0px 16px 8px rgba(51, 51, 255, 0.25), 0px 0px 8px 8px rgba(51, 51, 255, 0.25);
+  filter: drop-shadow(0px 4px 32px rgba(51, 51, 255, 0.5));
+  border-radius: 5px;
+}
+
+.lockedPosition {
+  min-height: 80px;
 }
 
 .chosenPositionsList {
   list-style-type: none;
+  min-height: 464px;
   max-height: 464px;
-  overflow-y: scroll;
   margin: 0;
   padding: 0;
+}
+
+.chosenPositionsList_overflowY_scroll {
+  overflow-y: scroll;
+}
+
+.chosenPositionsList_overflowY_hidden {
+  overflow-y: hidden;
 }
 
 .chosenPositionsList::-webkit-scrollbar {

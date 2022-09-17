@@ -1,6 +1,6 @@
 import { API_PATH_ORDERS, API_PATH_INGREDIENTS } from '../utils/constants';
 
-function getOrderData(ingredientsId) {
+function getOrderDataRequest(ingredientsId) { 
   return fetch(API_PATH_ORDERS, {
     method: 'POST',
     headers: {
@@ -16,7 +16,7 @@ function getOrderData(ingredientsId) {
     });
 };
 
-function getIngredientsData() {
+function getAllIngredientsRequest() {
   return fetch(API_PATH_INGREDIENTS)
     .then((res) => {
       if (!res.ok) {
@@ -27,4 +27,4 @@ function getIngredientsData() {
 };
 
 
-export { getOrderData, getIngredientsData };
+export { getOrderDataRequest, getAllIngredientsRequest };

@@ -1,8 +1,7 @@
-const API_PATH_INGREDIENTS = 'https://norma.nomoreparties.space/api/ingredients';
-const API_PATH_ORDERS = 'https://norma.nomoreparties.space/api/orders';
-const TOTAL_PRICE_INITIAL_STATE = { totalPrice: 0 };
-const ACTION_TYPE_SUM = 'sum';
-const ACTION_TYPE_RESET = 'reset';
-const INGREDIENT_TYPE_BUN = 'bun';
-
-export { API_PATH_INGREDIENTS, API_PATH_ORDERS, TOTAL_PRICE_INITIAL_STATE, ACTION_TYPE_SUM, ACTION_TYPE_RESET, INGREDIENT_TYPE_BUN };
+export const API_PATH_INGREDIENTS = 'https://norma.nomoreparties.space/api/ingredients';
+export const API_PATH_ORDERS = 'https://norma.nomoreparties.space/api/orders';
+export const TOTAL_PRICE_INITIAL_STATE = { totalPrice: 0 };
+export const ACTION_TYPE_SUM = 'sum';
+export const ACTION_TYPE_RESET = 'reset';
+export const INGREDIENT_TYPE_BUN = 'bun';
+export const USE_IN_VIEW_OPTIONS = { threshold: 0.1 };

@@ -1,79 +1,109 @@
-import React from 'react';
-import { useContext, useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import burgerConstructorStyles from './BurgerConstructor.module.css';
 import { ConstructorElement, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
 import Modal from '../Modal/Modal';
 import OrderDetails from '../OrderDetails/OrderDetails';
-import { getOrderData } from '../../utils/api';
-import { ACTION_TYPE_SUM, INGREDIENT_TYPE_BUN } from '../../utils/constants';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  ADD_BUN_TO_CONSTRUCTOR,
+  ADD_STUFFING_ELEMENT_TO_CONSTRUCTOR,
+  CONSTRUCTOR_CLEANUP
+} from '../../services/actions/constructorIngredients';
+import { getOrderData } from '../../services/actions/orderData';
+import { useDrop } from "react-dnd";
+import Loader from '../Loader/Loader';
 
-import { IngredientsContext, TotalPriceContext } from '../../services/appContext';
+
 
 function BurgerConstructor() {
+  const dispatch = useDispatch();
   const [isOpened, setIsOpened] = useState(false);
-  const { state, setState } = useContext(IngredientsContext);
-  const { totalPriceState, totalPriceDispatcher } = useContext(TotalPriceContext);
-
-  const bunItem = useMemo(
-    () => state.data.find(item => item.type === INGREDIENT_TYPE_BUN),
-    [state.data]
+  const bunItem = useSelector(store => store.constructorIngredients.bun);
+  const stuffingItems = useSelector(store => store.constructorIngredients.stuffing);
+  const ingredientsId = useMemo(
+    () => [bunItem, ...stuffingItems, bunItem].map(item => item ? item._id : ''),
+    [bunItem, stuffingItems]
   );
-  const detailsItems = useMemo(() => state.data.filter(item => item.type !== INGREDIENT_TYPE_BUN),
-    [state.data]
-  );
+  const { orderData, orderDataRequest } = useSelector(store => store.orderData);
 
-  useEffect(() =>
-    totalPriceDispatcher({ type: ACTION_TYPE_SUM, payload: [bunItem, ...detailsItems] }),
-    [bunItem, detailsItems]
-  );
-
-  useEffect(() => {
-    const idArr = [bunItem, bunItem, ...detailsItems].map(item => item ? item._id : '');
-
-    setState((prevState) => ({ ...prevState, ingredientsId: idArr }))
-  },
-    [state.data]
-  );
-
-  function getOrderDataFromBackend() {
-    getOrderData(state.ingredientsId)
-      .then(data => setState((prevState) => ({ ...prevState, orderData: data })))
-      .catch(err => console.log(err));
+  const getOrderDataFromBackend = (idArr) => {
+    setIsOpened(true);
+    dispatch(getOrderData(idArr));
   };
+
+  const constructorCleanup = () => {
+    setIsOpened(false);
+    if (orderData.success) dispatch({ type: CONSTRUCTOR_CLEANUP });
+  }
+
+  const totalPrice = useMemo(() => {
+    return (
+      (Object.keys(bunItem).length > 0 ? bunItem.price * 2 : 0) +
+      stuffingItems.reduce((sum, curr) => sum + curr.price, 0)
+    );
+  }, [bunItem, stuffingItems]);
+
+  const [{ isHover }, dropRef] = useDrop({
+    accept: "ingredients",
+    drop(item) {
+      item.type === "bun"
+        ? dispatch({ type: ADD_BUN_TO_CONSTRUCTOR, payload: item })
+        : dispatch({
+          type: ADD_STUFFING_ELEMENT_TO_CONSTRUCTOR,
+          payload: {
+            ...item,
+            id: Math.random().toString().slice(2)
+          }
+        });
+    },
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+  });
+
+  const chosenPositionsListScroll = stuffingItems && (stuffingItems.length >= 5) ?
+    'chosenPositionsList_overflowY_scroll' :
+    'chosenPositionsList_overflowY_hidden';
+
 
 
   return (
-    <section className={`${burgerConstructorStyles.section} pt-25`}>
+    <div className={`${burgerConstructorStyles.section} pt-25`}>
 
-      <ul className={burgerConstructorStyles.positionsList}>
+      <ul
+        className={`${burgerConstructorStyles.positionsList} ${isHover ? burgerConstructorStyles.hoveredList : ''}`}
+        ref={dropRef}
+      >
 
-        <li className='ml-8 mr-4 mb-4'>
-          {bunItem && <ConstructorElement
-            key={bunItem._id}
-            type="top"
-            isLocked={true}
-            text={`${bunItem.name} (верх)`}
-            price={bunItem.price}
-            thumbnail={bunItem.image} />}
+        <li className={`${burgerConstructorStyles.lockedPosition} ml-8 mr-4 mb-4`}>
+          {Object.keys(bunItem).length > 0 &&
+            <ConstructorElement
+              key={bunItem._id}
+              type="top"
+              isLocked={true}
+              text={`${bunItem.name} (верх)`}
+              price={bunItem.price}
+              thumbnail={bunItem.image} />}
         </li>
 
         <li>
-          <ul className={burgerConstructorStyles.chosenPositionsList}>
-            {detailsItems.map(item =>
-              <BurgerConstructorItem data={item} key={item._id} />
+          <ul className={`${burgerConstructorStyles.chosenPositionsList} ${burgerConstructorStyles[chosenPositionsListScroll]}`}>
+            {stuffingItems && stuffingItems.map((item, index) =>
+              <BurgerConstructorItem data={item} index={index} key={item.id} />
             )}
           </ul>
         </li>
 
-        <li className='mt-4 ml-8 mr-4'>
-          {bunItem && <ConstructorElement
-            key={bunItem._id}
-            type="bottom"
-            isLocked={true}
-            text={`${bunItem.name} (низ)`}
-            price={bunItem.price}
-            thumbnail={bunItem.image} />
+        <li className={`${burgerConstructorStyles.lockedPosition} mt-4 ml-8 mr-4`}>
+          {Object.keys(bunItem).length > 0 &&
+            <ConstructorElement
+              key={bunItem._id}
+              type="bottom"
+              isLocked={true}
+              text={`${bunItem.name} (низ)`}
+              price={bunItem.price}
+              thumbnail={bunItem.image} />
           }
         </li>
 
@@ -81,33 +111,37 @@ function BurgerConstructor() {
 
       <div className={`${burgerConstructorStyles.infoGroup} mt-10 mr-4`}>
         <div className={`${burgerConstructorStyles.priceGroup} mr-10`}>
-          <p className='text text_type_digits-medium mr-5'>{totalPriceState.totalPrice}</p>
+          <p className='text text_type_digits-medium mr-5'>{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
 
-        <Button type="primary" size="large" onClick={() => {
-          setIsOpened(true);
-          getOrderDataFromBackend();
-        }}>Оформить заказ</Button>
+        <Button
+          type="primary"
+          size="large"
+          disabled={(Object.keys(bunItem).length > 0) | (Object.keys(stuffingItems).length > 0) ? false : true}
+          onClick={() => { getOrderDataFromBackend(ingredientsId) }}>
+          Оформить заказ
+        </Button>
 
-        <Modal isOpened={isOpened} onClose={() => setIsOpened(false)}>
-          {state.orderData.success ? (
-            <OrderDetails
-              orderId={state.orderData.order.number.toString()}
-              orderStatus='Ваш заказ начали готовить'
-              orderInfoMessage='Дождитесь готовности на орбитальной станции'
-            />) : (
-            <OrderDetails
-              orderId=''
-              orderStatus='В процессе оформления заказа возникла ошибка'
-              orderInfoMessage='Попробуйте оформить заказ позже'
-            />)
-          }
+        <Modal isOpened={isOpened} onClose={() => { constructorCleanup() }} >
+          {orderDataRequest ? (<Loader size='superLarge' />) :
+            orderData.success ? (
+              <OrderDetails
+                orderId={orderData.order.number.toString()}
+                orderStatus='Ваш заказ начали готовить'
+                orderInfoMessage='Дождитесь готовности на орбитальной станции'
+              />) : (
+              <OrderDetails
+                orderId=''
+                orderStatus='В процессе оформления заказа возникла ошибка'
+                orderInfoMessage='Попробуйте оформить заказ позже'
+              />
+            )}
         </Modal>
 
       </div>
 
-    </section>
+    </div>
   );
 }
 

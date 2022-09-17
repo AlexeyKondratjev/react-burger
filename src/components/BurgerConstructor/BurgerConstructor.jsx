@@ -12,6 +12,7 @@ import {
 } from '../../services/actions/constructorIngredients';
 import { getOrderData } from '../../services/actions/orderData';
 import { useDrop } from "react-dnd";
+import Loader from '../Loader/Loader';
 
 
 
@@ -24,7 +25,7 @@ function BurgerConstructor() {
     () => [bunItem, ...stuffingItems, bunItem].map(item => item ? item._id : ''),
     [bunItem, stuffingItems]
   );
-  const orderData = useSelector(store => store.orderData);
+  const { orderData, orderDataRequest } = useSelector(store => store.orderData);
 
   const getOrderDataFromBackend = (idArr) => {
     setIsOpened(true);
@@ -68,7 +69,7 @@ function BurgerConstructor() {
 
 
   return (
-    <section className={`${burgerConstructorStyles.section} pt-25`}>
+    <div className={`${burgerConstructorStyles.section} pt-25`}>
 
       <ul
         className={`${burgerConstructorStyles.positionsList} ${isHover ? burgerConstructorStyles.hoveredList : ''}`}
@@ -118,28 +119,29 @@ function BurgerConstructor() {
           type="primary"
           size="large"
           disabled={(Object.keys(bunItem).length > 0) | (Object.keys(stuffingItems).length > 0) ? false : true}
-          onClick={() => {getOrderDataFromBackend(ingredientsId)}}>
+          onClick={() => { getOrderDataFromBackend(ingredientsId) }}>
           Оформить заказ
         </Button>
 
-        <Modal isOpened={isOpened} onClose={() => {constructorCleanup()}} >
-          {orderData.success ? (
-            <OrderDetails
-              orderId={orderData.order.number.toString()}
-              orderStatus='Ваш заказ начали готовить'
-              orderInfoMessage='Дождитесь готовности на орбитальной станции'
-            />) : (
-            <OrderDetails
-              orderId=''
-              orderStatus='В процессе оформления заказа возникла ошибка'
-              orderInfoMessage='Попробуйте оформить заказ позже'
-            />
-          )}
+        <Modal isOpened={isOpened} onClose={() => { constructorCleanup() }} >
+          {orderDataRequest ? (<Loader size='superLarge' />) :
+            orderData.success ? (
+              <OrderDetails
+                orderId={orderData.order.number.toString()}
+                orderStatus='Ваш заказ начали готовить'
+                orderInfoMessage='Дождитесь готовности на орбитальной станции'
+              />) : (
+              <OrderDetails
+                orderId=''
+                orderStatus='В процессе оформления заказа возникла ошибка'
+                orderInfoMessage='Попробуйте оформить заказ позже'
+              />
+            )}
         </Modal>
 
       </div>
 
-    </section>
+    </div>
   );
 }
 

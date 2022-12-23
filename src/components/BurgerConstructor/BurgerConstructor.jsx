@@ -116,6 +116,7 @@ function BurgerConstructor() {
         </div>
 
         <Button
+          htmlType="button"
           type="primary"
           size="large"
           disabled={(Object.keys(bunItem).length > 0) | (Object.keys(stuffingItems).length > 0) ? false : true}

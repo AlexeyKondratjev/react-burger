@@ -1,10 +1,19 @@
 import React from 'react';
 import appStyles from './App.module.css';
 import AppHeader from '../AppHeader/AppHeader';
-import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
-import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { Route, Switch } from "react-router-dom";
+import { ProtectedRoute } from "../ProtectedRoute/ProtectedRoute";
+import {
+  LoginPage,
+  MainPage,
+  RegistrationPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  ProfilePage,
+  IngredientDetailsPage,
+  NotFoundPage,
+  OrdersPage
+} from '../../pages/index';
 
 
 
@@ -12,12 +21,36 @@ export default function App() {
   return (
     <div className={appStyles.page}>
       <AppHeader />
-      <DndProvider backend={HTML5Backend}>
-        <main className={appStyles.main}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </main>
-      </DndProvider>
+
+      <Switch>
+        <Route path='/' exact={true}>
+          <MainPage />
+        </Route>
+        <Route path='/login' exact={true}>
+          <LoginPage />
+        </Route>
+        <Route path='/register' exact={true}>
+          <RegistrationPage />
+        </Route>
+        <Route path='/forgot-password' exact={true}>
+          <ForgotPasswordPage />
+        </Route>
+        <Route path='/reset-password' exact={true}>
+          <ResetPasswordPage />
+        </Route>
+        <ProtectedRoute path='/profile' exact={true}>
+          <ProfilePage />
+        </ProtectedRoute>
+        <ProtectedRoute path='/profile/orders' exact={true}>
+          <OrdersPage />
+        </ProtectedRoute>
+        <Route path='/ingredients/:id' exact={true}>
+          <IngredientDetailsPage />
+        </Route>
+        <Route>
+          <NotFoundPage />
+        </Route>
+      </Switch>
     </div>
   );
 }

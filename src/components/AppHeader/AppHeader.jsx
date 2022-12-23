@@ -1,6 +1,7 @@
 import React from 'react';
 import appHeaderStyles from './AppHeader.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Link } from 'react-router-dom';
 
 function AppHeader() {
   return (
@@ -21,10 +22,15 @@ function AppHeader() {
                 <p className='text text_type_main-default ml-2'>Лента заказов</p>
               </a>
             </li>
+
+
           </ul>
         </nav>
 
-        <Logo />
+        <Link to='/'>
+          <Logo />
+        </Link>
+
 
         <nav className={appHeaderStyles.personalCab}>
           <ul className={appHeaderStyles.list}>

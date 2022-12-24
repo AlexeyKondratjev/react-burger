@@ -54,7 +54,8 @@ const initialState = {
   refreshUserDataMessage: '',
   updateTokenRequest: false,
   updateTokenFailed: false,
-  updateTokenMessage: ''
+  updateTokenMessage: '',
+  isPasswordRecoveryEmailReceived: false
 };
 
 
@@ -163,7 +164,8 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         forgotPasswordRequest: false,
         forgotPasswordFailed: false,
-        forgotPasswordMessage: message
+        forgotPasswordMessage: message,
+        isPasswordRecoveryEmailReceived: true
       }
     }
     case FORGOT_PASSWORD_FAILED: {
@@ -188,7 +190,8 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         resetPasswordRequest: false,
         resetPasswordFailed: false,
-        resetPasswordMessage: message
+        resetPasswordMessage: message,
+        isPasswordRecoveryEmailReceived: false
       }
     }
     case RESET_PASSWORD_FAILED: {

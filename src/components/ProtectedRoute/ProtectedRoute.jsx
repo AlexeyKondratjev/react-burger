@@ -17,7 +17,7 @@ export function ProtectedRoute({ children, ...rest }) {
         isUserAuth ? (
           children
         ) : (
-          <Redirect to={{ pathname: '/login', state: { from: location } }} />
+          <Redirect to={{pathname: '/login', state:{from: location}}}/>
         )
       }
     />

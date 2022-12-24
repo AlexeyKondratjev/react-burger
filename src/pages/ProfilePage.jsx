@@ -3,13 +3,15 @@ import { useSelector, useDispatch } from "react-redux";
 import styles from './ProfilePage.module.css';
 import commonStyles from './commonStyles.module.css';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { logoutUser, getUserData, refreshUserData, updateToken } from '../services/actions/auth';
-
+import { getCookie } from '../utils/cookie';
 
 
 export function ProfilePage() {
   const dispatch = useDispatch();
+
+  const isUserAuth = getCookie('token');
 
   const { name, email } = useSelector(store => store.auth.user);
   const { getUserDataFailed, getUserDataMessage, updateTokenRequest } = useSelector(store => store.auth);
@@ -58,7 +60,7 @@ export function ProfilePage() {
   }
 
 
-  return (
+  return  (!isUserAuth) ? (<Redirect to='/login' />) : (
     <main className={commonStyles.main}>
 
       <div className={styles.container}>

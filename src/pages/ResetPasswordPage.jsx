@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { useDispatch } from "react-redux";
 import commonStyles from './commonStyles.module.css';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import { resetPassword } from '../services/actions/auth';
-
+import { getCookie } from '../utils/cookie';
 
 export function ResetPasswordPage() {
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const isUserAuth = getCookie('token');
 
   const [passwordValue, setPasswordValue] = useState('');
   const [resetCodeValue, setResetCodeValue] = useState('');
@@ -18,7 +21,11 @@ export function ResetPasswordPage() {
     dispatch(resetPassword(passwordValue, resetCodeValue));
   }
 
-  return (
+
+
+  return (isUserAuth) ? (
+    <Redirect to='/' />
+  ) : (location.state?.from?.pathname !== '/forgot-password') ? (<Redirect to='/forgot-password' />) : (
     <main className={commonStyles.main}>
 
       <div className={commonStyles.container}>

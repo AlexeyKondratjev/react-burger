@@ -1,29 +1,29 @@
 import React from 'react';
-import appHeaderStyles from './AppHeader.module.css';
+import styles from './AppHeader.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 function AppHeader() {
+  const location = useLocation();
+
   return (
-    <header className={appHeaderStyles.header}>
-      <div className={appHeaderStyles.content}>
+    <header className={styles.header}>
+      <div className={styles.content}>
 
         <nav>
-          <ul className={appHeaderStyles.list}>
+          <ul className={styles.list}>
             <li className='mt-4 mr-7 mb-4 ml-5'>
-              <a href='#' className={`${appHeaderStyles.link} ${appHeaderStyles.link_active}`}>
-                <BurgerIcon type='primary' />
+              <NavLink to='/' exact={true} className={styles.link} activeClassName={styles.activeLink}>
+                <BurgerIcon type={location.pathname === '/' ? 'primary' : 'secondary' } />
                 <p className='text text_type_main-default ml-2'>Конструктор</p>
-              </a>
+              </NavLink>
             </li>
             <li className='mt-4 mr-5 mb-4 ml-5'>
-              <a href='#' className={appHeaderStyles.link}>
-                <ListIcon type='secondary' />
+              <NavLink to='/orders-feed' exact={true} className={styles.link} activeClassName={styles.activeLink}>
+                <ListIcon type={location.pathname === '/orders-feed' ? 'primary' : 'secondary' } />
                 <p className='text text_type_main-default ml-2'>Лента заказов</p>
-              </a>
+              </NavLink>
             </li>
-
-
           </ul>
         </nav>
 
@@ -31,14 +31,13 @@ function AppHeader() {
           <Logo />
         </Link>
 
-
-        <nav className={appHeaderStyles.personalCab}>
-          <ul className={appHeaderStyles.list}>
+        <nav className={styles.personalCab}>
+          <ul className={styles.list}>
             <li className='mt-4 mr-5 mb-4 ml-5'>
-              <a href='#' className={appHeaderStyles.link}>
-                <ProfileIcon type='secondary' />
+              <NavLink to='/profile' exact={true} className={styles.link} activeClassName={styles.activeLink}>
+                <ProfileIcon type={location.pathname === '/profile' ? 'primary' : 'secondary' } />
                 <p className='text text_type_main-default ml-2'>Личный кабинет</p>
-              </a>
+              </NavLink>
             </li>
           </ul>
         </nav>

@@ -1,25 +1,33 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Redirect, Route, useLocation } from 'react-router-dom';
-import { getCookie } from '../../utils/cookie';
 
 
 
-export function ProtectedRoute({ children, ...rest }) {
-  const isUserAuth = getCookie('token');
+export function ProtectedRoute({ onlyUnAuth, children, ...rest }) {
+  const { user } = useSelector(store => store.auth);
   const location = useLocation();
 
-  console.log('ProtectedRoute. location ', location);
+  if (onlyUnAuth && user) {
+    const { from } = location.state || { from: { pathname: '/' } };
 
-  return (
-    <Route
-      {...rest}
-      render={() =>
-        isUserAuth ? (
-          children
-        ) : (
-          <Redirect to={{pathname: '/login', state:{from: location}}}/>
-        )
-      }
-    />
-  );
+    return (
+      <Route {...rest}>
+        <Redirect to={from} />
+      </Route>
+    );
+  }
+
+  if (!onlyUnAuth && !user) {
+    return (
+      <Route {...rest}>
+        <Redirect to={{ pathname: '/login', state: { from: location } }} />
+      </Route>
+    );
+  }
+
+  return <Route {...rest}>
+    {children}
+  </Route>;
+
 }

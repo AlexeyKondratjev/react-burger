@@ -27,10 +27,7 @@ import {
 import { setCookie, deleteCookie } from '../../utils/cookie';
 
 const initialState = {
-  user: {
-    name: '',
-    email: ''
-  },
+  user: null,
   registrationRequest: false,
   registrationFailed: false,
   registrationFailedMessage: '',
@@ -136,10 +133,7 @@ export const authReducer = (state = initialState, action) => {
         logoutRequest: false,
         logoutFailed: false,
         logoutFailedMessage: '',
-        user: {
-          email: '',
-          name: ''
-        }
+        user: initialState.user
       }
     }
     case LOGOUT_USER_FAILED: {

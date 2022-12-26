@@ -3,18 +3,15 @@ import { useSelector, useDispatch } from "react-redux";
 import styles from './ProfilePage.module.css';
 import commonStyles from './commonStyles.module.css';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { NavLink, Redirect } from 'react-router-dom';
-import { logoutUser, getUserData, refreshUserData, updateToken } from '../services/actions/auth';
-import { getCookie } from '../utils/cookie';
+import { NavLink } from 'react-router-dom';
+import { logoutUser, refreshUserData } from '../services/actions/auth';
+
 
 
 export function ProfilePage() {
   const dispatch = useDispatch();
 
-  const isUserAuth = getCookie('token');
-
   const { name, email } = useSelector(store => store.auth.user);
-  const { getUserDataFailed, getUserDataMessage, updateTokenRequest } = useSelector(store => store.auth);
 
   const [nameValue, setNameValue] = useState('');
   const [loginValue, setLoginValue] = useState(''); //Логин на форме соответствует e-mail пользователя.
@@ -25,19 +22,6 @@ export function ProfilePage() {
 
     dispatch(logoutUser());
   }
-
-  useEffect(() => {
-    dispatch(getUserData());
-  },
-    [dispatch, updateTokenRequest]);
-
-  useEffect(() => {
-    if (getUserDataFailed && getUserDataMessage === 'Ошибка 403') {
-      console.log('User data fetch error. Need to update access token!');
-      dispatch(updateToken());
-    }
-  },
-    [getUserDataFailed, getUserDataMessage]);
 
   useEffect(() => {
     setNameValue(name);
@@ -60,7 +44,7 @@ export function ProfilePage() {
   }
 
 
-  return  (!isUserAuth) ? (<Redirect to='/login' />) : (
+  return (
     <main className={commonStyles.main}>
 
       <div className={styles.container}>

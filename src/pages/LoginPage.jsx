@@ -2,20 +2,13 @@ import React, { useState } from 'react';
 import { useDispatch } from "react-redux";
 import commonStyles from './commonStyles.module.css';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, Redirect, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { loginUser } from '../services/actions/auth';
-import { getCookie } from '../utils/cookie';
 
 
 
 export function LoginPage() {
   const dispatch = useDispatch();
-
-  const isUserAuth = getCookie('token');
-  const location = useLocation();
-
-  console.log('LoginP. isUserAuth', isUserAuth);
-  console.log('LoginP. location', location);
 
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
@@ -27,9 +20,7 @@ export function LoginPage() {
   }
 
 
-  return (isUserAuth) ? (
-    <Redirect to={location?.state?.from || '/'}/>
-  ) : (
+  return (
     <main className={commonStyles.main}>
 
       <div className={commonStyles.container}>

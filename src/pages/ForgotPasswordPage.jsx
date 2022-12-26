@@ -4,13 +4,11 @@ import commonStyles from './commonStyles.module.css';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import { forgotPassword } from '../services/actions/auth';
-import { getCookie } from '../utils/cookie';
 
 
 export function ForgotPasswordPage() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const isUserAuth = getCookie('token');
 
   const { isPasswordRecoveryEmailReceived } = useSelector(store => store.auth);
 
@@ -22,13 +20,11 @@ export function ForgotPasswordPage() {
     dispatch(forgotPassword(emailValue));
   }
 
-  if (isPasswordRecoveryEmailReceived) {
-    return (<Redirect to={{ pathname: '/reset-password', state: {from: location} }} />);
-  }
+   if (isPasswordRecoveryEmailReceived) {
+     return (<Redirect to={{ pathname: '/reset-password', state: {from: location} }} />);
+   }
 
-  return (isUserAuth) ? (
-    <Redirect to='/' />
-  ) : (
+  return (
     <main className={commonStyles.main}>
 
       <div className={commonStyles.container}>
@@ -42,7 +38,12 @@ export function ForgotPasswordPage() {
             onChange={e => setEmailValue(e.target.value)}
             extraClass='mt-6'
           />
-          <Button htmlType="submit" type="primary" size="medium" extraClass='mt-6 mb-20' >
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="medium"
+            extraClass='mt-6 mb-20'
+            disabled={!emailValue} >
             Восстановить
           </Button>
         </form>

@@ -4,13 +4,11 @@ import commonStyles from './commonStyles.module.css';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import { resetPassword } from '../services/actions/auth';
-import { getCookie } from '../utils/cookie';
+
 
 export function ResetPasswordPage() {
   const dispatch = useDispatch();
   const location = useLocation();
-
-  const isUserAuth = getCookie('token');
 
   const [passwordValue, setPasswordValue] = useState('');
   const [resetCodeValue, setResetCodeValue] = useState('');
@@ -21,11 +19,11 @@ export function ResetPasswordPage() {
     dispatch(resetPassword(passwordValue, resetCodeValue));
   }
 
+  if (location.state?.from?.pathname !== '/forgot-password') {
+    return <Redirect to='/forgot-password' />;
+  };
 
-
-  return (isUserAuth) ? (
-    <Redirect to='/' />
-  ) : (location.state?.from?.pathname !== '/forgot-password') ? (<Redirect to='/forgot-password' />) : (
+  return (
     <main className={commonStyles.main}>
 
       <div className={commonStyles.container}>
@@ -45,7 +43,12 @@ export function ResetPasswordPage() {
             onChange={e => setResetCodeValue(e.target.value)}
             extraClass='mt-6'
           />
-          <Button htmlType="submit" type="primary" size="medium" extraClass='mt-6 mb-20' >
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="medium"
+            extraClass='mt-6 mb-20'
+            disabled={!passwordValue || !resetCodeValue} >
             Сохранить
           </Button>
         </form>

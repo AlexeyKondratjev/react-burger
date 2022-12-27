@@ -52,7 +52,8 @@ const initialState = {
   updateTokenRequest: false,
   updateTokenFailed: false,
   updateTokenMessage: '',
-  isPasswordRecoveryEmailReceived: false
+  isPasswordRecoveryEmailReceived: false,
+  isResetPasswordSuccess: false
 };
 
 
@@ -185,7 +186,8 @@ export const authReducer = (state = initialState, action) => {
         resetPasswordRequest: false,
         resetPasswordFailed: false,
         resetPasswordMessage: message,
-        isPasswordRecoveryEmailReceived: false
+        isPasswordRecoveryEmailReceived: false,
+        isResetPasswordSuccess: true
       }
     }
     case RESET_PASSWORD_FAILED: {

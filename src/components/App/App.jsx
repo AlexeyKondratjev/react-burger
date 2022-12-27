@@ -50,6 +50,7 @@ export default function App() {
       console.log('User data fetch error. Need to update access token!');
 
       dispatch(updateToken());
+      dispatch(getUserData());
     }
   },
     [getUserDataFailed, getUserDataMessage]);

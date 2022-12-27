@@ -19,7 +19,7 @@ function AppHeader() {
               </NavLink>
             </li>
             <li className='mt-4 mr-5 mb-4 ml-5'>
-              <NavLink to='/orders-feed' exact={true} className={styles.link} activeClassName={styles.activeLink}>
+              <NavLink to='/orders-feed' className={styles.link} activeClassName={styles.activeLink}>
                 <ListIcon type={location.pathname === '/orders-feed' ? 'primary' : 'secondary' } />
                 <p className='text text_type_main-default ml-2'>Лента заказов</p>
               </NavLink>
@@ -34,7 +34,7 @@ function AppHeader() {
         <nav className={styles.personalCab}>
           <ul className={styles.list}>
             <li className='mt-4 mr-5 mb-4 ml-5'>
-              <NavLink to='/profile' exact={true} className={styles.link} activeClassName={styles.activeLink}>
+              <NavLink to='/profile' className={styles.link} activeClassName={styles.activeLink}>
                 <ProfileIcon type={location.pathname === '/profile' ? 'primary' : 'secondary' } />
                 <p className='text text_type_main-default ml-2'>Личный кабинет</p>
               </NavLink>

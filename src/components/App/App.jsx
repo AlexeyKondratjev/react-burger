@@ -16,7 +16,7 @@ import {
   OrdersPage
 } from '../../pages/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserData, updateToken } from '../../services/actions/auth';
+import { getUserData } from '../../services/actions/auth';
 import { getAllIngredients } from '../../services/actions/allIngredients';
 import { RESET_MODAL } from '../../services/actions/modal';
 import OrderDetails from '../OrderDetails/OrderDetails';
@@ -32,7 +32,6 @@ export default function App() {
 
   const background = location.state?.background;
 
-  const { getUserDataFailed, getUserDataMessage } = useSelector(store => store.auth);
   const { isOpened, content } = useSelector(store => store.modal);
   const { orderData, orderDataRequest } = useSelector(store => store.orderData);
 
@@ -45,16 +44,6 @@ export default function App() {
     dispatch(getAllIngredients())
   }, [dispatch]);
 
-  useEffect(() => {
-    if (getUserDataFailed && getUserDataMessage === 'Ошибка 403') {
-      console.log('User data fetch error. Need to update access token!');
-
-      dispatch(updateToken());
-      dispatch(getUserData());
-    }
-  },
-    [getUserDataFailed, getUserDataMessage]);
-
   const onIngredientModalClose = (background) => {
     dispatch({ type: RESET_MODAL });
     history.replace({ pathname: background.pathname })
@@ -64,6 +53,7 @@ export default function App() {
     dispatch({ type: RESET_MODAL });
     if (orderData.success) dispatch({ type: CONSTRUCTOR_CLEANUP });
   };
+
 
 
   return (

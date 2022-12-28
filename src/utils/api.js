@@ -31,6 +31,7 @@ const fetchWithRefresh = async (url, options) => {
       console.log('Access and refresh tokens update successfully!');
 
       options.headers.authorization = accessToken;
+
       const res = await fetch(url, options); //вызываем перезапрос данных
 
       return await checkReponse(res);
@@ -120,7 +121,7 @@ export async function refreshUserDataRequest(email, name, password) {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + getCookie('token')
+      authorization: 'Bearer ' + getCookie('token')
     },
     body: JSON.stringify({ name: name, email: email, password: password })
   });

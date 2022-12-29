@@ -14,13 +14,13 @@ function AppHeader() {
           <ul className={styles.list}>
             <li className='mt-4 mr-7 mb-4 ml-5'>
               <NavLink to='/' exact={true} className={styles.link} activeClassName={styles.activeLink}>
-                <BurgerIcon type={location.pathname === '/' ? 'primary' : 'secondary' } />
+                <BurgerIcon type={location.pathname === '/' ? 'primary' : 'secondary'} />
                 <p className='text text_type_main-default ml-2'>Конструктор</p>
               </NavLink>
             </li>
             <li className='mt-4 mr-5 mb-4 ml-5'>
-              <NavLink to='/orders-feed' className={styles.link} activeClassName={styles.activeLink}>
-                <ListIcon type={location.pathname === '/orders-feed' ? 'primary' : 'secondary' } />
+              <NavLink to='/feed' className={styles.link} activeClassName={styles.activeLink}>
+                <ListIcon type={location.pathname === '/feed' ? 'primary' : 'secondary'} />
                 <p className='text text_type_main-default ml-2'>Лента заказов</p>
               </NavLink>
             </li>
@@ -35,7 +35,7 @@ function AppHeader() {
           <ul className={styles.list}>
             <li className='mt-4 mr-5 mb-4 ml-5'>
               <NavLink to='/profile' className={styles.link} activeClassName={styles.activeLink}>
-                <ProfileIcon type={location.pathname === '/profile' ? 'primary' : 'secondary' } />
+                <ProfileIcon type={location.pathname === '/profile' ? 'primary' : 'secondary'} />
                 <p className='text text_type_main-default ml-2'>Личный кабинет</p>
               </NavLink>
             </li>

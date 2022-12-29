@@ -13,7 +13,8 @@ import {
   ResetPasswordPage,
   ProfilePage,
   NotFoundPage,
-  OrdersPage
+  OrdersPage,
+  FeedPage
 } from '../../pages/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserData } from '../../services/actions/auth';
@@ -84,6 +85,9 @@ export default function App() {
         </ProtectedRoute>
         <Route path='/ingredients/:id' exact={true}>
           <IngredientDetails />
+        </Route>
+        <Route path='/feed' exact={true}>
+          <FeedPage />
         </Route>
         <Route>
           <NotFoundPage />

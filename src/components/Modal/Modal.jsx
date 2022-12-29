@@ -8,7 +8,7 @@ import ModalOverlay from '../ModalOverlay/ModalOverlay';
 
 
 
-function Modal({ children, isOpened, onClose, title = "" }) {
+function Modal({ children, onClose, title = "" }) {
 
   useEffect(() => {
     const closeByEsc = (event) => {
@@ -17,18 +17,14 @@ function Modal({ children, isOpened, onClose, title = "" }) {
       }
     }
 
-    if (isOpened) {
-      document.addEventListener('keydown', closeByEsc);
+    document.addEventListener('keydown', closeByEsc);
 
-      return () => {
-        document.removeEventListener('keydown', closeByEsc);
-      };
-    }
-  }, [isOpened]);
+    return () => document.removeEventListener('keydown', closeByEsc);
+  }, []);
 
 
 
-  return isOpened ? (ReactDOM.createPortal(
+  return ReactDOM.createPortal(
     (
       <>
         <div className={modalStyles.modalContainer}>
@@ -42,16 +38,13 @@ function Modal({ children, isOpened, onClose, title = "" }) {
         </div>
         <ModalOverlay onClick={onClose} />
       </>
-    ),
-    document.getElementById('react-modals')
-  )) : null;
+    ), document.getElementById('react-modals'));
 }
 
 
 
 Modal.propTypes = {
   children: PropTypes.element.isRequired,
-  isOpened: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string
 }

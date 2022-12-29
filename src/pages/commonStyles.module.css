@@ -1,0 +1,37 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 180px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.navigationBlock {
+  display: flex;
+}
+
+.navigationLink {
+  color: #4C4CFF;
+  text-decoration: none;
+  transition: color .3s ease-in;
+}
+
+.navigationLink:hover {
+  color: #F2F2F3;
+}
+
+.navigationLinkActive {
+  color: #F2F2F3;
+}

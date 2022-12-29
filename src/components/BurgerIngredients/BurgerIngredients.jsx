@@ -1,38 +1,28 @@
 import React, { useEffect, useCallback } from 'react';
-/* import PropTypes from 'prop-types'; */
 import burgerIngredientsStyles from './BurgerIngredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Ingredient from '../Ingredient/Ingredient';
-/* import ingredientType from '../../utils/types'; */
-import Modal from '../Modal/Modal';
-import IngredientDetails from '../IngredientDetails/IngredientDetails';
 import Loader from '../Loader/Loader';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllIngredients } from '../../services/actions/allIngredients';
-import {
-  GET_VIEWED_INGREDIENT,
-  REMOVE_VIEWED_INGREDIENT
-} from '../../services/actions/viewedIngredient';
 import { useInView } from 'react-intersection-observer';
 import { USE_IN_VIEW_OPTIONS } from '../../utils/constants';
+import { SET_MODAL, RESET_MODAL } from '../../services/actions/modal';
 
 
 
 function BurgerIngredients() {
   const dispatch = useDispatch();
+
   const [current, setCurrent] = React.useState('bunTab');
-  const [isOpened, setIsOpened] = React.useState(false);
   const { allIngredients, allIngredientsRequest } = useSelector(store => store.allIngredients);
 
-  const getViewedIngredientData = useCallback((payload) => {
-    setIsOpened(true);
-    dispatch({ type: GET_VIEWED_INGREDIENT, payload: payload });
-  }, [isOpened, dispatch]);
+  const getViewedIngredientData = useCallback(() => {
+    dispatch({ type: SET_MODAL, payload: { content: 'ingredient' } });
+  }, [dispatch]);
 
-  const removeViewedIngredientData = useCallback(() => {
-    setIsOpened(false);
-    dispatch({ type: REMOVE_VIEWED_INGREDIENT });
-  }, [isOpened, dispatch]);
+  /*   const removeViewedIngredientData = useCallback(() => {
+      dispatch({ type: RESET_MODAL });
+    }, [dispatch]); */
 
   const getFilteredIngredients = (data, filterCondition) => {
     const filtered = data.filter(item => item.type === filterCondition);
@@ -41,13 +31,9 @@ function BurgerIngredients() {
       <Ingredient
         data={item}
         key={item._id}
-        onClick={() => { getViewedIngredientData(item) }}
+        onClick={() => { getViewedIngredientData() }}
       />);
   };
-
-  useEffect(() => {
-    dispatch(getAllIngredients())
-  }, [dispatch]);
 
 
   const [bunListItemRef, bunListItemInView] = useInView(USE_IN_VIEW_OPTIONS);
@@ -123,19 +109,9 @@ function BurgerIngredients() {
             </li>
           </ul>
         )}
-
-      <Modal title='Детали ингредиента' isOpened={isOpened} onClose={() => { removeViewedIngredientData() }}>
-        <IngredientDetails />
-      </Modal>
-
     </section>
   );
 }
 
-/* BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape(ingredientType)
-  ).isRequired
-}; */
 
 export default BurgerIngredients;

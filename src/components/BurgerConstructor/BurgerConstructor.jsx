@@ -1,41 +1,40 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import burgerConstructorStyles from './BurgerConstructor.module.css';
 import { ConstructorElement, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
-import Modal from '../Modal/Modal';
-import OrderDetails from '../OrderDetails/OrderDetails';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   ADD_BUN_TO_CONSTRUCTOR,
-  ADD_STUFFING_ELEMENT_TO_CONSTRUCTOR,
-  CONSTRUCTOR_CLEANUP
+  ADD_STUFFING_ELEMENT_TO_CONSTRUCTOR
 } from '../../services/actions/constructorIngredients';
 import { getOrderData } from '../../services/actions/orderData';
 import { useDrop } from "react-dnd";
-import Loader from '../Loader/Loader';
+import { SET_MODAL } from '../../services/actions/modal';
+import { useHistory } from 'react-router-dom';
 
 
 
 function BurgerConstructor() {
   const dispatch = useDispatch();
-  const [isOpened, setIsOpened] = useState(false);
+  const history = useHistory();
+
+  const { user } = useSelector(store => store.auth);
+
   const bunItem = useSelector(store => store.constructorIngredients.bun);
   const stuffingItems = useSelector(store => store.constructorIngredients.stuffing);
   const ingredientsId = useMemo(
     () => [bunItem, ...stuffingItems, bunItem].map(item => item ? item._id : ''),
     [bunItem, stuffingItems]
   );
-  const { orderData, orderDataRequest } = useSelector(store => store.orderData);
 
   const getOrderDataFromBackend = (idArr) => {
-    setIsOpened(true);
-    dispatch(getOrderData(idArr));
+    if (!user) {
+      history.push('/login');
+    } else {
+      dispatch(getOrderData(idArr));
+      dispatch({ type: SET_MODAL, payload: { content: 'order' } });
+    }
   };
-
-  const constructorCleanup = () => {
-    setIsOpened(false);
-    if (orderData.success) dispatch({ type: CONSTRUCTOR_CLEANUP });
-  }
 
   const totalPrice = useMemo(() => {
     return (
@@ -116,29 +115,13 @@ function BurgerConstructor() {
         </div>
 
         <Button
+          htmlType="button"
           type="primary"
           size="large"
           disabled={(Object.keys(bunItem).length > 0) | (Object.keys(stuffingItems).length > 0) ? false : true}
           onClick={() => { getOrderDataFromBackend(ingredientsId) }}>
           Оформить заказ
         </Button>
-
-        <Modal isOpened={isOpened} onClose={() => { constructorCleanup() }} >
-          {orderDataRequest ? (<Loader size='superLarge' />) :
-            orderData.success ? (
-              <OrderDetails
-                orderId={orderData.order.number.toString()}
-                orderStatus='Ваш заказ начали готовить'
-                orderInfoMessage='Дождитесь готовности на орбитальной станции'
-              />) : (
-              <OrderDetails
-                orderId=''
-                orderStatus='В процессе оформления заказа возникла ошибка'
-                orderInfoMessage='Попробуйте оформить заказ позже'
-              />
-            )}
-        </Modal>
-
       </div>
 
     </div>

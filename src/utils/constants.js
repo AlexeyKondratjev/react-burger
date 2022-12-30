@@ -17,3 +17,5 @@ export const ACTION_TYPE_SUM = 'sum';
 export const ACTION_TYPE_RESET = 'reset';
 export const INGREDIENT_TYPE_BUN = 'bun';
 export const USE_IN_VIEW_OPTIONS = { threshold: 0.1 };
+
+export const INGREDIENT_ICON_VIEWED_IN_ORDER_CARD_MAX = 5;

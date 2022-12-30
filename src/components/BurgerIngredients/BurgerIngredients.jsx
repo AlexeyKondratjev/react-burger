@@ -20,10 +20,6 @@ function BurgerIngredients() {
     dispatch({ type: SET_MODAL, payload: { content: 'ingredient' } });
   }, [dispatch]);
 
-  /*   const removeViewedIngredientData = useCallback(() => {
-      dispatch({ type: RESET_MODAL });
-    }, [dispatch]); */
-
   const getFilteredIngredients = (data, filterCondition) => {
     const filtered = data.filter(item => item.type === filterCondition);
 

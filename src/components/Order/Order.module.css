@@ -10,8 +10,21 @@
 
 .groupImagesPrice {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  min-height: 64px;
 }
 
 .groupPrice {
   display: flex;
+}
+
+.list {
+  list-style-type: none;
+}
+
+.listItem {
+  position: absolute;
+  top: 0;
 }

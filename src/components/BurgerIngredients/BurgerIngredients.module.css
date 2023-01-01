@@ -12,8 +12,8 @@
 
 .categoryList {
   list-style-type: none;
-  max-height: 664px;
-  overflow-y: scroll;
+  max-height: calc(100vh - 302px);
+  overflow-y: auto;
   margin: 0;
   padding: 0;
 }

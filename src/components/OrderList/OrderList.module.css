@@ -6,20 +6,11 @@
 
 .ordersList {
   list-style-type: none;
-  min-height: 825px;
-  max-height: 825px;
+  max-height: calc(100vh - 205px);
   margin: 0;
   padding: 0;
   overflow-y: auto;
 }
-
-/* .ordersList_overflowY_scroll {
-  overflow-y: scroll;
-}
-
-.ordersList_overflowY_hidden {
-  overflow-y: hidden;
-} */
 
 .ordersList::-webkit-scrollbar {
   background-color: #2F2F37;

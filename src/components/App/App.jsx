@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUserData } from '../../services/actions/auth';
 import { getAllIngredients } from '../../services/actions/allIngredients';
 import { RESET_MODAL } from '../../services/actions/modal';
-import OrderDetails from '../OrderDetails/OrderDetails';
+import OrderInfo from '../OrderInfo/OrderInfo';
 import { CONSTRUCTOR_CLEANUP } from '../../services/actions/constructorIngredients';
 import Loader from '../Loader/Loader';
 
@@ -89,6 +89,9 @@ export default function App() {
         <Route path='/feed' exact={true}>
           <FeedPage />
         </Route>
+        <Route path='/feed/:id' exact={true}>
+          {/* <IngredientDetails /> */}
+        </Route>
         <Route>
           <NotFoundPage />
         </Route>
@@ -105,12 +108,12 @@ export default function App() {
         < Modal onClose={() => onOrderModalClose()} >
           {orderDataRequest ? (<Loader size='superLarge' />) :
             orderData.success ? (
-              <OrderDetails
+              <OrderInfo
                 orderId={orderData.order.number.toString()}
                 orderStatus='Ваш заказ начали готовить'
                 orderInfoMessage='Дождитесь готовности на орбитальной станции'
               />) : (
-              <OrderDetails
+              <OrderInfo
                 orderId=''
                 orderStatus='В процессе оформления заказа возникла ошибка'
                 orderInfoMessage='Попробуйте оформить заказ позже'

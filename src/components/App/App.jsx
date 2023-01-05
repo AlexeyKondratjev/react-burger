@@ -21,8 +21,10 @@ import { getUserData } from '../../services/actions/auth';
 import { getAllIngredients } from '../../services/actions/allIngredients';
 import { RESET_MODAL } from '../../services/actions/modal';
 import OrderInfo from '../OrderInfo/OrderInfo';
-import { CONSTRUCTOR_CLEANUP } from '../../services/actions/constructorIngredients';
+import { OrderDetails } from '../OrderDetails/OrderDetails';
 import Loader from '../Loader/Loader';
+import { CONSTRUCTOR_CLEANUP } from '../../services/actions/constructorIngredients';
+import { OrderDetailsPage } from '../../pages/OrderDetailsPage';
 
 
 
@@ -47,12 +49,17 @@ export default function App() {
 
   const onIngredientModalClose = (background) => {
     dispatch({ type: RESET_MODAL });
-    history.replace({ pathname: background.pathname })
+    history.replace({ pathname: background.pathname });
   };
 
-  const onOrderModalClose = () => {
+  const onOrderInfoModalClose = () => {
     dispatch({ type: RESET_MODAL });
     if (orderData.success) dispatch({ type: CONSTRUCTOR_CLEANUP });
+  };
+
+  const onOrderDetailsModalClose = () => {
+    dispatch({ type: RESET_MODAL });
+    history.replace({ pathname: background.pathname });
   };
 
 
@@ -83,6 +90,9 @@ export default function App() {
         <ProtectedRoute path='/profile/orders' exact={true}>
           <OrdersPage />
         </ProtectedRoute>
+        <ProtectedRoute path='/profile/orders/:id' exact={true}>
+          <OrderDetailsPage />
+        </ProtectedRoute>
         <Route path='/ingredients/:id' exact={true}>
           <IngredientDetails />
         </Route>
@@ -90,22 +100,36 @@ export default function App() {
           <FeedPage />
         </Route>
         <Route path='/feed/:id' exact={true}>
-          {/* <IngredientDetails /> */}
+          <OrderDetailsPage />
         </Route>
         <Route>
           <NotFoundPage />
         </Route>
       </Switch>
 
-      {background &&
-        (<Route path='/ingredients/:id'>
+      {background && (content === 'ingredient') &&
+        (<Route path='/ingredients/:id' exact={true}>
           <Modal title='Детали ингредиента' onClose={() => onIngredientModalClose(background)} >
             <IngredientDetails />
           </Modal>
         </Route>)
       }
-      {isOpened && (content === 'order') &&
-        < Modal onClose={() => onOrderModalClose()} >
+      {background &&
+        (<ProtectedRoute path='/profile/orders/:id' exact={true}>
+          <Modal onClose={() => onOrderDetailsModalClose(background)} >
+            <OrderDetails />
+          </Modal>
+        </ProtectedRoute>)
+      }
+      {background && /* (content === 'orderDetails') && */
+        (<Route path='/feed/:id' exact={true}>
+          <Modal onClose={() => onOrderDetailsModalClose(background)} >
+            <OrderDetails />
+          </Modal>
+        </Route>)
+      }
+      {isOpened && (content === 'orderInfo') &&
+        < Modal onClose={() => onOrderInfoModalClose()} >
           {orderDataRequest ? (<Loader size='superLarge' />) :
             orderData.success ? (
               <OrderInfo

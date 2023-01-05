@@ -6,7 +6,7 @@ import Loader from '../Loader/Loader';
 import { useSelector, useDispatch } from 'react-redux';
 import { useInView } from 'react-intersection-observer';
 import { USE_IN_VIEW_OPTIONS } from '../../utils/constants';
-import { SET_MODAL, RESET_MODAL } from '../../services/actions/modal';
+import { SET_MODAL } from '../../services/actions/modal';
 
 
 

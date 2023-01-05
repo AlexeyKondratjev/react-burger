@@ -32,7 +32,7 @@ function BurgerConstructor() {
       history.push('/login');
     } else {
       dispatch(getOrderData(idArr));
-      dispatch({ type: SET_MODAL, payload: { content: 'order' } });
+      dispatch({ type: SET_MODAL, payload: { content: 'orderInfo' } });
     }
   };
 

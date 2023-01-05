@@ -1,51 +1,74 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './Order.module.css';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientIcon } from '../IngredientIcon/IngredientIcon';
 import { INGREDIENT_ICON_VIEWED_IN_ORDER_CARD_MAX } from '../../utils/constants';
+import { SET_MODAL } from '../../services/actions/modal';
+import { getOrderIngredients, getOrderPrice } from '../../utils/utils';
+import { renderOrderStatus } from '../../utils/interface';
 
 
+export function Order({ data, renderStatus = false }) {
+  const dispatch = useDispatch();
 
-export function Order({ id, date, name, price, arrTemp = [1, 2, 3, 4, 5, 6, 7] }) {
+  const { number, createdAt, name, status, ingredients } = data;
+  const { allIngredients } = useSelector(store => store.allIngredients);
+
+  const orderIngredients = useMemo(() => {
+    return getOrderIngredients(ingredients, allIngredients);
+  }, [ingredients, allIngredients]);
+
+  const orderPrice = useMemo(() => {
+    return getOrderPrice(orderIngredients);
+  }, [orderIngredients]);
+
 
   const outputIngredientIcons = (array) => {
     return array.map((item, index) => {
       if (index < INGREDIENT_ICON_VIEWED_IN_ORDER_CARD_MAX) {
         return <li className={styles.listItem} key={index} style={{ left: index * 48, zIndex: array.length - index }}>
-          <IngredientIcon ingredientId={item} />
+          <IngredientIcon ingredient={item} />
         </li>
       } else if (index === INGREDIENT_ICON_VIEWED_IN_ORDER_CARD_MAX) {
         return <li className={styles.listItem} key={index} style={{ left: index * 48, zIndex: array.length - index }}>
-          <IngredientIcon ingredientId={item} numberToRender={array.length - index} />
+          <IngredientIcon ingredient={item} numberToRender={array.length - index} />
         </li>
       } else return null;
     });
   };
 
+  const onOrderClick = useCallback(() => {
+    dispatch({ type: SET_MODAL, payload: { content: 'orderDetails' } });
+  }, [dispatch]);
+
+
+
   return (
-    <li className='mr-2'>
+    <li className='mr-2' onClick={onOrderClick}>
       <div className={`${styles.container} p-6 mb-4`}>
 
         <div className={`${styles.groupIdDate} mb-6`}>
-          <p className="text text_type_digits-default">{`#${id}`}</p>
+          <p className="text text_type_digits-default">{`#${number}`}</p>
           <div className='text text_type_main-default text_color_inactive'>
             <p className={styles.dateTimezoneOffset}>
-              <FormattedDate date={new Date(date)} />
-              {` i-GMT+${-new Date(date).getTimezoneOffset() / 60}`}
+              <FormattedDate date={new Date(createdAt)} />
+              {` i-GMT+${-new Date(createdAt).getTimezoneOffset() / 60}`}
             </p>
           </div>
         </div>
 
-        <p className="text text_type_main-medium mb-6">{name}</p>
+        <p className='text text_type_main-medium'>{name}</p>
 
-        <div className={styles.groupImagesPrice}>
+        {renderStatus && renderOrderStatus(status, 'text text_type_main-default mt-2')}
+
+        <div className={`${styles.groupImagesPrice} mt-6`}>
           <ul className={styles.list}>
-            {outputIngredientIcons(arrTemp)}
+            {outputIngredientIcons(orderIngredients)}
           </ul>
 
-
           <div className={`${styles.groupPrice} pl-6`}>
-            <p className="text text_type_digits-default pr-2">{price}</p>
+            <p className="text text_type_digits-default pr-2">{orderPrice.toLocaleString()}</p>
             <CurrencyIcon type="primary" />
           </div>
         </div>

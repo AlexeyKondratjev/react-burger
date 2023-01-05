@@ -1,13 +1,19 @@
 import React from 'react';
 import styles from './OrderStats.module.css';
+import { useSelector } from 'react-redux';
 
 
-export function OrderStats({ total = 28752, totalToday = 138 }) {
-  const displayOrderNumber = (isDone = false, ordersArray = ['034533', '034532', '034530', '034527', '034525', '034523']) => {
-    return ordersArray.map((item, index) => {
+export function OrderStats() {
+  const { orders, total, totalToday } = useSelector(store => store.ws);
+
+  const ordersStatusDone = orders?.filter(item => item.status === 'done').slice(0, 30);
+  const ordersStatusPending = orders?.filter(item => item.status === 'pending').slice(0, 30);
+
+  const displayOrderNumber = (ordersArray, isDone = false) => {
+    return ordersArray.map(item => {
       return (
-        <li key={index} className={`${styles.listItem} mb-2`}>
-          <p className={`${isDone ? styles.orderDone : ''} text text_type_digits-default`}>{item}</p>
+        <li key={item._id} className={`${styles.listItem} mb-2`}>
+          <p className={`${isDone ? styles.orderDone : ''} text text_type_digits-default`}>{item.number}</p>
         </li>);
     });
   };
@@ -20,7 +26,7 @@ export function OrderStats({ total = 28752, totalToday = 138 }) {
           <h2 className='text text_type_main-medium mb-6'>Готовы:</h2>
 
           <ul className={styles.list}>
-            {displayOrderNumber(true)}
+            {displayOrderNumber(ordersStatusDone, true)}
           </ul>
         </div>
 
@@ -28,7 +34,7 @@ export function OrderStats({ total = 28752, totalToday = 138 }) {
           <h2 className='text text_type_main-medium mb-6'>В работе:</h2>
 
           <ul className={styles.list}>
-            {displayOrderNumber()}
+            {displayOrderNumber(ordersStatusPending)}
           </ul>
         </div>
       </div>

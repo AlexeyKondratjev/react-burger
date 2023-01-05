@@ -35,3 +35,11 @@
 .navigationLinkActive {
   color: #F2F2F3;
 }
+
+.statusDone {
+  color: #00CCCC;
+}
+
+.statusCancelled {
+  color: #f00;
+}

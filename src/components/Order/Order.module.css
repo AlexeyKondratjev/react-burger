@@ -1,0 +1,34 @@
+.container {
+  background-color: #1C1C21;
+  border-radius: 40px;
+}
+
+.groupIdDate {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dateTimezoneOffset {
+  margin: 0;
+}
+
+.groupImagesPrice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  min-height: 64px;
+}
+
+.groupPrice {
+  display: flex;
+}
+
+.list {
+  list-style-type: none;
+}
+
+.listItem {
+  position: absolute;
+  top: 0;
+}

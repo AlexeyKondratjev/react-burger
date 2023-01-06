@@ -46,7 +46,8 @@ export async function getOrderDataRequest(ingredientsId) {
   return await fetchWithRefresh(API_PATH_ORDERS, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      authorization: 'Bearer ' + getCookie('token')
     },
     body: JSON.stringify({ ingredients: ingredientsId })
   })

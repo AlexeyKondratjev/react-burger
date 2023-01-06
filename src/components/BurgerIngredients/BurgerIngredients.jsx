@@ -6,7 +6,7 @@ import Loader from '../Loader/Loader';
 import { useSelector, useDispatch } from 'react-redux';
 import { useInView } from 'react-intersection-observer';
 import { USE_IN_VIEW_OPTIONS } from '../../utils/constants';
-import { SET_MODAL, RESET_MODAL } from '../../services/actions/modal';
+import { SET_MODAL } from '../../services/actions/modal';
 
 
 
@@ -19,10 +19,6 @@ function BurgerIngredients() {
   const getViewedIngredientData = useCallback(() => {
     dispatch({ type: SET_MODAL, payload: { content: 'ingredient' } });
   }, [dispatch]);
-
-  /*   const removeViewedIngredientData = useCallback(() => {
-      dispatch({ type: RESET_MODAL });
-    }, [dispatch]); */
 
   const getFilteredIngredients = (data, filterCondition) => {
     const filtered = data.filter(item => item.type === filterCondition);

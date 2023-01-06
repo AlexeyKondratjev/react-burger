@@ -46,7 +46,7 @@ export const wsReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                orders: orders, /*???? [...action.payload.orders] */
+                orders: orders,
                 total: total,
                 totalToday: totalToday
             };

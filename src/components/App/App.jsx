@@ -121,7 +121,7 @@ export default function App() {
           </Modal>
         </ProtectedRoute>)
       }
-      {background && /* (content === 'orderDetails') && */
+      {background &&
         (<Route path='/feed/:id' exact={true}>
           <Modal onClose={() => onOrderDetailsModalClose(background)} >
             <OrderDetails />

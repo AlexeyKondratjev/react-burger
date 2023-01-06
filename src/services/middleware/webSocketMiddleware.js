@@ -1,5 +1,5 @@
 import { getCookie } from "../../utils/cookie";
-import { updateToken } from "../actions/auth";
+import { getUserData } from "../actions/auth";
 import { wsInitAuthConnection } from "../actions/webSocket";
 
 export const socketMiddleware = (wsUrl, wsActions) => {
@@ -32,7 +32,6 @@ export const socketMiddleware = (wsUrl, wsActions) => {
         }
         socket.onerror = event => {
           console.log('WS onError.', event);
-          /* dispatch({ type: wsOnError, payload: event }); */
         }
         socket.onmessage = event => {
           const { data } = event;
@@ -50,7 +49,7 @@ export const socketMiddleware = (wsUrl, wsActions) => {
           dispatch({ type: wsDisconnect }); 
 
           if (isConnected) {
-            dispatch(updateToken());
+            dispatch(getUserData());
 
             reconnectTimer = window.setTimeout(() => {
               console.log('Try to reconnect WS...');

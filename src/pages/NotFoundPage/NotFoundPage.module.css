@@ -1,0 +1,29 @@
+.container {
+  background-image: url('../../images/404_background.png');
+  width: 1280px;
+  height: 860px;
+  background-size: cover;
+  background-position: center;
+}
+
+.h1 {
+  padding-top: 326px;
+  padding-left: 413px;
+}
+
+.p1 {
+  display: flex;
+  justify-content: center;
+}
+
+.p2 {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 200px;
+}
+
+.navigationBlock {
+  display: flex;
+  justify-content: center;
+  padding-top: 200px;
+}

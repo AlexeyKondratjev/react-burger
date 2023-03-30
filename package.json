@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.20.5",
+    "@reduxjs/toolkit": "^1.9.2",
     "@ya.praktikum/react-developer-burger-ui-components": "^1.14.0",
     "mini-create-react-context": "^0.4.1",
     "react": "^16.10.0",
@@ -17,7 +18,7 @@
     "react-scripts": "4.0.2",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
-    "typescript": "3.5.3"
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -43,6 +44,8 @@
     ]
   },
   "devDependencies": {
+    "@types/react-dom": "^18.0.10",
+    "@types/react-router-dom": "^5.3.3",
     "gh-pages": "^4.0.0"
   }
 }

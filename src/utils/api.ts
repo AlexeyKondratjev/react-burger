@@ -1,14 +1,4 @@
-import {
-  API_PATH_ORDERS,
-  API_PATH_INGREDIENTS,
-  API_PATH_AUTH_SIGNUP,
-  API_PATH_AUTH_SIGNIN,
-  API_PATH_AUTH_SIGNOUT,
-  API_PATH_AUTH_USER,
-  API_PATH_PASSWORD_FORGOT,
-  API_PATH_PASSWORD_RESET,
-  API_PATH_TOKEN_UPDATE
-} from './constants';
+import { API_PATH_BASE_URL } from './constants';
 import { getCookie, setCookie } from './cookie';
 import {
   IIngredientDataResponse,
@@ -64,7 +54,7 @@ const fetchWithRefresh = async <T>(url: string, options?: TOptions): Promise<T> 
 
 
 export async function getOrderDataRequest(ingredientsId: string[]) {
-  return await fetchWithRefresh<TOrderDetails>(API_PATH_ORDERS, {
+  return await fetchWithRefresh<TOrderDetails>(`${API_PATH_BASE_URL}/orders`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -75,11 +65,11 @@ export async function getOrderDataRequest(ingredientsId: string[]) {
 };
 
 export async function getAllIngredientsRequest() {
-  return await fetchWithRefresh<IIngredientDataResponse>(API_PATH_INGREDIENTS);
+  return await fetchWithRefresh<IIngredientDataResponse>(`${API_PATH_BASE_URL}/ingredients`);
 };
 
 export async function signUpUserRequest(email: string, password: string, name: string) {
-  return await fetchWithRefresh<IAuthResponse>(API_PATH_AUTH_SIGNUP, {
+  return await fetchWithRefresh<IAuthResponse>(`${API_PATH_BASE_URL}/auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -89,7 +79,7 @@ export async function signUpUserRequest(email: string, password: string, name: s
 };
 
 export async function signInUserRequest(email: string, password: string) {
-  return await fetchWithRefresh<IAuthResponse>(API_PATH_AUTH_SIGNIN, {
+  return await fetchWithRefresh<IAuthResponse>(`${API_PATH_BASE_URL}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -99,7 +89,7 @@ export async function signInUserRequest(email: string, password: string) {
 };
 
 export async function signOutUserRequest() {
-  return await fetchWithRefresh<IAuthOutResponse>(API_PATH_AUTH_SIGNOUT, {
+  return await fetchWithRefresh<IAuthOutResponse>(`${API_PATH_BASE_URL}/auth/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -109,7 +99,7 @@ export async function signOutUserRequest() {
 };
 
 export async function forgotPasswordRequest(email: string) {
-  return await fetchWithRefresh<IPasswordForgotResetResponse>(API_PATH_PASSWORD_FORGOT, {
+  return await fetchWithRefresh<IPasswordForgotResetResponse>(`${API_PATH_BASE_URL}/password-reset`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -119,7 +109,7 @@ export async function forgotPasswordRequest(email: string) {
 };
 
 export async function resetPasswordRequest(password: string, code: string) {
-  return await fetchWithRefresh<IPasswordForgotResetResponse>(API_PATH_PASSWORD_RESET, {
+  return await fetchWithRefresh<IPasswordForgotResetResponse>(`${API_PATH_BASE_URL}/password-reset/reset`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -129,7 +119,7 @@ export async function resetPasswordRequest(password: string, code: string) {
 };
 
 export async function getUserDataRequest() {
-  return await fetchWithRefresh<IUserDataResponce>(API_PATH_AUTH_USER, {
+  return await fetchWithRefresh<IUserDataResponce>(`${API_PATH_BASE_URL}/auth/user`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -139,7 +129,7 @@ export async function getUserDataRequest() {
 };
 
 export async function refreshUserDataRequest(email: string, name: string, password: string) {
-  return await fetchWithRefresh<IUserDataResponce>(API_PATH_AUTH_USER, {
+  return await fetchWithRefresh<IUserDataResponce>(`${API_PATH_BASE_URL}/auth/user`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -150,7 +140,7 @@ export async function refreshUserDataRequest(email: string, name: string, passwo
 };
 
 export async function updateTokenRequest() {
-  return await fetchWithRefresh<ITokenUpdResponse>(API_PATH_TOKEN_UPDATE, {
+  return await fetchWithRefresh<ITokenUpdResponse>(`${API_PATH_BASE_URL}/auth/token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

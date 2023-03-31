@@ -62,7 +62,7 @@ export default function App() {
 
   const onOrderDetailsModalClose = () => {
     dispatch(ResetModalAction());
-    history.replace({ pathname: background!.pathname });
+    history.replace({ pathname: background.pathname });
   };
 
 
@@ -110,26 +110,24 @@ export default function App() {
         </Route>
       </Switch>
 
-      {background && (content === 'ingredient') &&
-        (<Route path='/ingredients/:id' exact={true}>
-          <Modal title='Детали ингредиента' onClose={() => onIngredientModalClose(background)} >
-            <IngredientDetails />
-          </Modal>
-        </Route>)
-      }
       {background &&
-        (<ProtectedRoute path='/profile/orders/:id' exact={true}>
-          <Modal onClose={() => onOrderDetailsModalClose()} >
-            <OrderDetails />
-          </Modal>
-        </ProtectedRoute>)
-      }
-      {background &&
-        (<Route path='/feed/:id' exact={true}>
-          <Modal onClose={() => onOrderDetailsModalClose()} >
-            <OrderDetails />
-          </Modal>
-        </Route>)
+        <>
+          <Route path='/ingredients/:id' exact={true}>
+            <Modal title='Детали ингредиента' onClose={() => onIngredientModalClose(background)} >
+              <IngredientDetails />
+            </Modal>
+          </Route>
+          <ProtectedRoute path='/profile/orders/:id' exact={true}>
+            <Modal onClose={() => onOrderDetailsModalClose()} >
+              <OrderDetails />
+            </Modal>
+          </ProtectedRoute>
+          <Route path='/feed/:id' exact={true}>
+            <Modal onClose={() => onOrderDetailsModalClose()} >
+              <OrderDetails />
+            </Modal>
+          </Route>
+        </>
       }
       {isOpened && (content === 'orderInfo') &&
         < Modal onClose={() => onOrderInfoModalClose()} >

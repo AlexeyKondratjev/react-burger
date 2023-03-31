@@ -5,16 +5,16 @@ import { TLocationState, TProtectedRouteComponent } from '../../services/types/d
 
 
 
-export const ProtectedRoute: FC<TProtectedRouteComponent> = ({ onlyUnAuth = false, children, ...rest }) => {
+export const ProtectedRoute: FC<TProtectedRouteComponent> = ({ onlyUnAuth, children, ...rest }) => {
   const { user } = useSelector(store => store.auth);
   const location = useLocation<TLocationState>();
 
   if (onlyUnAuth && user) {
-    /* const { from } = location.state || { from: { pathname: '/' } }; */
+    const { from } = location.state || { from: { pathname: '/' } };
 
     return (
       <Route {...rest}>
-        <Redirect to={'/'} />
+        <Redirect to={from} />
       </Route>
     );
   }
